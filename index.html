@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>SafeNex</title>
+  <meta name="description" content="Responsive demo with glassmorphism and GSAP animations">
+  <link rel="stylesheet" href="css/styles.css">
+  <!-- GSAP CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js" defer></script>
+  <script src="js/script.js" defer></script>
+</head>
+<body id="top">
+  <!-- Loader overlay (shown until page resources load) -->
+  <div id="loaderOverlay" class="loader-overlay" aria-hidden="true">
+    <div class="loader-inner" role="status" aria-label="Loading">
+      <svg class="loader-ring" viewBox="0 0 50 50" aria-hidden="true">
+        <circle cx="25" cy="25" r="20" fill="none" stroke-width="4" stroke-linecap="round"></circle>
+      </svg>
+      <div class="loader-text">Safenex</div>
+    </div>
+  </div>
+  <header class="site-header">
+    <div class="nav-wrap">
+      <a href="index.html" class="logo-link" aria-label="Home">
+        <img src="assets/logo_white.png" alt="Safenex logo" class="logo-img">
+      </a>
+      <nav class="nav">
+        <a href="#top">Home</a>
+        <a href="#features">Features</a>
+        <a href="#about">Services</a>
+        <a href="#contact">About Us</a>
+      </nav>
+      <button class="menu-toggle" aria-expanded="false" aria-label="Toggle menu">☰</button>
+    </div>
+
+    <div class="hero">
+      <svg class="hero-blob" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <!-- polygon will be morphed via JS by changing points -->
+        <polygon id="blob" points="300,40 460,90 550,230 480,350 300,370 140,320 70,190 120,80" fill="rgba(255,255,255,0.06)"></polygon>
+      </svg>
+
+      <div class="glass-card">
+        <!-- Horizontal hero cards: scroll-snap row of cards inside the glass card -->
+        <div class="hero-cards" role="list" aria-label="Hero cards">
+          <article class="hero-card" role="listitem">
+            <div class="hero-card-body">
+              <h1>Beautiful UI with glass & motion</h1>
+              <p>Responsive layout, glassmorphism header, morphing shapes and GSAP-driven microanimations.</p>
+            </div>
+            <div class="cta-row">
+              <a class="btn primary" href="#features">Explore</a>
+              <a class="btn ghost" href="#about">Learn more</a>
+            </div>
+          </article>
+
+          <article class="hero-card" role="listitem">
+            <div class="hero-card-body">
+              <h2>Smooth micro-interactions</h2>
+              <p>Subtle motion, hover previews and animated feedback designed to delight without distraction.</p>
+            </div>
+            <div class="cta-row">
+              <a class="btn primary" href="#features">See features</a>
+              <a class="btn ghost" href="#contact">Contact us</a>
+            </div>
+          </article>
+
+          <article class="hero-card" role="listitem">
+            <div class="hero-card-body">
+              <h2>Fast and accessible</h2>
+              <p>Built with performance and accessibility in mind — keyboard-friendly and optimized transitions.</p>
+            </div>
+            <div class="cta-row">
+              <a class="btn primary" href="#about">About</a>
+              <a class="btn ghost" href="#contact">Get in touch</a>
+            </div>
+          </article>
+
+          <article class="hero-card" role="listitem">
+            <div class="hero-card-body">
+              <h2>Polished visuals</h2>
+              <p>Glass effects, layered gradients and a morphing SVG create a modern, cohesive brand experience.</p>
+            </div>
+            <div class="cta-row">
+              <a class="btn primary" href="#features">Explore</a>
+              <a class="btn ghost" href="#about">Learn more</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+  <main>
+    <section id="features" class="section features">
+      <h2>Features</h2>
+      <div class="features-grid">
+        <article class="card big">
+          <div class="card-media" aria-hidden="true">
+            <!-- inline placeholder SVG shown on hover -->
+            <svg width="100%" height="100%" viewBox="0 0 400 260" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="g1" x1="0" x2="1"><stop offset="0" stop-color="#4a80c5"/><stop offset="1" stop-color="#18305a"/></linearGradient>
+              </defs>
+              <rect width="100%" height="100%" fill="url(#g1)" rx="12"/>
+              <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Inter, Arial" font-size="28" fill="rgba(255,255,255,0.9)">Image Preview</text>
+            </svg>
+          </div>
+          <h3>Glass header</h3>
+          <p>Backdrop blur, softened borders and layered gradients for a modern look.</p>
+        </article>
+
+        <article class="card big">
+          <div class="card-media" aria-hidden="true">
+            <svg width="100%" height="100%" viewBox="0 0 400 260" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+              <defs><linearGradient id="g2" x1="0" x2="1"><stop offset="0" stop-color="#2e6fae"/><stop offset="1" stop-color="#13406a"/></linearGradient></defs>
+              <rect width="100%" height="100%" fill="url(#g2)" rx="12"/>
+              <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Inter, Arial" font-size="28" fill="rgba(255,255,255,0.95)">Feature Image</text>
+            </svg>
+          </div>
+          <h3>Morphing shapes</h3>
+          <p>SVG shapes animate to create a living brand header.</p>
+        </article>
+
+        <article class="card big">
+          <div class="card-media" aria-hidden="true">
+            <svg width="100%" height="100%" viewBox="0 0 400 260" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+              <rect width="100%" height="100%" fill="#3a5a8a" rx="12"/>
+              <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Inter, Arial" font-size="28" fill="rgba(255,255,255,0.9)">Preview</text>
+            </svg>
+          </div>
+          <h3>GSAP-powered</h3>
+          <p>Entrance, scroll and footer animations implemented with GSAP for smooth performance.</p>
+        </article>
+
+        <!-- (Thumbnail row and rotation control removed as requested) -->
+      </div>
+    </section>
+
+    <!-- Precards: 4 overlapping interactive previews -->
+    <section id="precards" class="section precards-section">
+      <h2>Technologies used</h2>
+      <div class="precards" id="precards">
+        <article class="precard" tabindex="0" data-index="1">
+          <div class="pre-media"></div>
+          <div class="pre-info">
+            <h4>Preview One</h4>
+            <p>Short description for preview one. Click or press Enter to select.</p>
+          </div>
+        </article>
+        <article class="precard" tabindex="0" data-index="2">
+          <div class="pre-media"></div>
+          <div class="pre-info">
+            <h4>Preview Two</h4>
+            <p>Short description for preview two. Click or press Enter to select.</p>
+          </div>
+        </article>
+        <article class="precard" tabindex="0" data-index="3">
+          <div class="pre-media"></div>
+          <div class="pre-info">
+            <h4>Preview Three</h4>
+            <p>Short description for preview three. Click or press Enter to select.</p>
+          </div>
+        </article>
+        <article class="precard" tabindex="0" data-index="4">
+          <div class="pre-media"></div>
+          <div class="pre-info">
+            <h4>Preview Four</h4>
+            <p>Short description for preview four. Click or press Enter to select.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="about" class="section about">
+      <h2>Services — How SafeNex Protects Lives</h2>
+      <p>SafeNex combines simple sensors, microcontroller logic and fluid mechanics to stop fires before they start. Below are the core services the system delivers when a crash occurs.</p>
+      <p><strong>Impact Detection</strong></p>
+      <p>A flame sensor detects sudden increase in temp with a radiating heat. The sensor sends an immediate signal to the controller</p>
+      <p><strong>Decision & Trigger</strong></p>
+      <p>The microcontroller (Arduino or equivalent) checks the sensor input and safety interlocks, then triggers the injection sequence in milliseconds.</p>
+      <p><strong>Alert & Logging</strong></p>
+      <p>The system logs all events and alerts the user via a connected app which is always monitored by the nearest police station, ambulance and fire station.</p>
+      <p>+ Acts proactively — neutralizes fuel before ignition is possible.</p>
+      <p>+ Minimal wiring and compact hardware suitable for retrofit.</p>
+      <p>+ Compatible with vehicle safety systems (can pair with airbag sensors).</p>  
+    </section>
+
+    <section id="contact" class="section contact">
+      <h2>About SafeNex</h2>
+      <p>To reduce post-accident fatalities and property loss by providing an automatic, low-cost solution that prevents fuel tank fires through smart emulsification.</p>
+      <p><strong>Team & Credits</strong></p>
+      <p>Project by Anish De (XI-F) & Jeet Baidya (IX-A), Delhi Public School Ruby Park, Kolkata. Developed as a student safety-innovation project with focus on low cost, replicability and scalability.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+          <a href="index.html" class="logo-link small" aria-label="Home">
+            <img src="assets/logo_white.png" class="logo-img small" alt="Safenex">
+          </a>
+      </div>
+
+      <div class="footer-socials" aria-label="Social links">
+        <!-- WhatsApp links (assume country code +91). Clicking opens a chat window -->
+        <a class="social-btn whatsapp" href="https://wa.me/919064704626?text=Hello" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp 9064704626">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#fff" d="M20.52 3.48A11.9 11.9 0 0 0 12 0C5.37 0 .01 5.37.01 12a11.9 11.9 0 0 0 3.48 8.52L0 24l3.6-1.02A11.9 11.9 0 0 0 12 24c6.63 0 12-5.37 12-12 0-3.2-1.25-6.19-3.48-8.52zM12 21.5c-2.1 0-4.06-.62-5.72-1.68l-.41-.25-2.14.61.57-2.09-.27-.42A8.5 8.5 0 1 1 20.5 12 8.48 8.48 0 0 1 12 21.5z"/></svg>
+          <span class="sr-only">WhatsApp 9064704626</span>
+        </a>
+        <a class="social-btn whatsapp" href="https://wa.me/918017968388?text=Hello" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp 8017968388">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#fff" d="M20.52 3.48A11.9 11.9 0 0 0 12 0C5.37 0 .01 5.37.01 12a11.9 11.9 0 0 0 3.48 8.52L0 24l3.6-1.02A11.9 11.9 0 0 0 12 24c6.63 0 12-5.37 12-12 0-3.2-1.25-6.19-3.48-8.52zM12 21.5c-2.1 0-4.06-.62-5.72-1.68l-.41-.25-2.14.61.57-2.09-.27-.42A8.5 8.5 0 1 1 20.5 12 8.48 8.48 0 0 1 12 21.5z"/></svg>
+          <span class="sr-only">WhatsApp 8017968388</span>
+        </a>
+
+        <!-- Facebook -->
+        <a class="social-btn facebook" href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#fff" d="M22 12a10 10 0 1 0-11.5 9.9v-7H8.5v-3h2V9.2c0-2 1.2-3.1 3-3.1.9 0 1.8.16 1.8.16v2h-1c-1 0-1.3.6-1.3 1.2V12h2.2l-.35 3h-1.85v7A10 10 0 0 0 22 12"/></svg>
+          <span class="sr-only">Facebook</span>
+        </a>
+
+        <!-- Instagram -->
+        <a class="social-btn instagram" href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#fff" d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm5 6.2A4.8 4.8 0 1 0 16.8 13 4.8 4.8 0 0 0 12 8.2zm6.4-2.6a1.1 1.1 0 1 0 1.1 1.1 1.1 1.1 0 0 0-1.1-1.1zM12 10.6A1.4 1.4 0 1 1 10.6 12 1.4 1.4 0 0 1 12 10.6z"/></svg>
+          <span class="sr-only">Instagram</span>
+        </a>
+
+      </div>
+
+      <div class="footer-links">
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+        <a href="#">Support</a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="back-to-top">
+        <a href="#top" class="btn ghost" aria-label="Back to top">Back to top
+          <!-- inline arrow icon (arrow-right-up.svg) -->
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="margin-left:8px"><path d="M2 1C2 0.447715 2.44772 0 3 0L11 5.36442e-07C11.5523 5.36442e-07 12 0.447716 12 1V9C12 9.55229 11.5523 10 11 10C10.4477 10 10 9.55229 10 9V3.41421L1.70711 11.7071C1.31658 12.0976 0.683417 12.0976 0.292893 11.7071C-0.0976311 11.3166 -0.0976311 10.6834 0.292893 10.2929L8.58579 2L3 2C2.44772 2 2 1.55228 2 1Z" fill="#fff"/></svg>
+        </a>
+      </div>
+      <small>© <span id="year"></span> Safenex </small>
+    </div>
+  </footer>
+
+</body>
+</html>
