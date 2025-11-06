@@ -67,6 +67,7 @@ a{color:var(--accent); text-decoration:none}
 .card.big h3{margin-top:0}
 .card .card-media{position:absolute;inset:0;width:100%;height:100%;opacity:0;transform:scale(1.04);transition:opacity 320ms ease, transform 320ms ease, filter 320ms ease;pointer-events:none;border-radius:12px;overflow:hidden}
 .card .card-media svg{width:100%;height:100%;display:block}
+.card .card-media img{width:100%;height:100%;object-fit:cover;display:block}
 .card.big .card-media{box-shadow:0 20px 50px rgba(2,6,23,0.45);}
 
 /* on hover reveal the image as a full-cover and lift card */
@@ -91,6 +92,7 @@ a{color:var(--accent); text-decoration:none}
 .precards{position:relative;height:340px;max-width:1100px;margin:1rem auto;padding:1rem;display:block}
 .precard{position:absolute;width:44%;height:80%;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.04);box-shadow:0 14px 40px rgba(2,6,23,0.45);transition:transform 420ms cubic-bezier(.2,.9,.2,1), z-index 0ms linear 0ms, box-shadow 320ms ease;cursor:pointer;outline:none;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))}
 .precard .pre-media{position:absolute;inset:0;background-size:cover;background-position:center center;filter:contrast(0.92) saturate(1.06);transition:transform 420ms ease, opacity 320ms ease}
+.precard .pre-media img{width:100%;height:100%;object-fit:cover;display:block}
 .precard .pre-info{position:absolute;left:18px;bottom:18px;color:var(--text);z-index:3;pointer-events:none;opacity:0;transform:translateY(8px);transition:opacity 240ms ease, transform 240ms ease}
 .precard h4{margin:0 0 6px;font-size:1.15rem}
 .precard p{margin:0;color:var(--muted);font-size:0.95rem;max-width:70%}

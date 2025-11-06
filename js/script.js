@@ -433,4 +433,37 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
   })();
 
+  /* Lazy-load card hover images: when a .card.big with data-img is hovered or focused,
+     insert an <img> into its .card-media so the image appears on hover (keeps SVG placeholder otherwise).
+  */
+  (function(){
+    const cards = Array.from(document.querySelectorAll('.card.big[data-img]'));
+    if(!cards.length) return;
+
+    function ensureImage(card){
+      if(card.dataset._imgLoaded) return;
+      const src = card.dataset.img;
+      if(!src) return;
+      const media = card.querySelector('.card-media');
+      if(!media) return;
+      const img = document.createElement('img');
+      img.src = src;
+      img.alt = card.querySelector('h3, h2') ? card.querySelector('h3, h2').textContent + ' image' : 'Preview image';
+      img.loading = 'lazy';
+      img.className = 'card-media-img';
+      // when the image loads, mark loaded so we don't recreate it
+      img.addEventListener('load', ()=>{ card.dataset._imgLoaded = '1'; });
+      img.addEventListener('error', ()=>{ /* if image fails, keep SVG placeholder */ });
+      // prepend image so it sits under text layering if needed (but CSS controls opacity)
+      media.insertBefore(img, media.firstChild);
+    }
+
+    cards.forEach(c => {
+      c.addEventListener('mouseenter', ()=> ensureImage(c), {passive:true});
+      c.addEventListener('focusin', ()=> ensureImage(c));
+      // also load on touchstart for mobile
+      c.addEventListener('touchstart', ()=> ensureImage(c), {passive:true});
+    });
+  })();
+
 });
