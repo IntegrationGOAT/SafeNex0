@@ -161,15 +161,18 @@ document.addEventListener('DOMContentLoaded', ()=>{
     raf();
   })();
 
-  /* Hero cards autoplay: show one card at a time, animate swap via smooth scroll, pause on hover/focus, respects reduced-motion */
+  /* Hero cards with navigation arrows: infinite looping carousel with prev/next buttons */
   (function(){
     const container = document.querySelector('.hero-cards');
-    if(!container) return;
+    const btnPrev = document.querySelector('.hero-nav--prev');
+    const btnNext = document.querySelector('.hero-nav--next');
+    
+    if(!container || !btnPrev || !btnNext) return;
+    
     const original = Array.from(container.querySelectorAll('.hero-card'));
     if(original.length < 2) return;
 
     const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if(prefersReduced) return;
 
     // prevent double-init
     if(container.dataset.loopInit) return;
@@ -201,36 +204,35 @@ document.addEventListener('DOMContentLoaded', ()=>{
       if(!target) return;
       const left = cardCenterLeft(target);
       // prefer GSAP animation for consistent timing when available
-      if(smooth && typeof gsap !== 'undefined'){
+      if(smooth && typeof gsap !== 'undefined' && !prefersReduced){
         isAnimating = true;
         try{
-          gsap.to(container, {scrollLeft: left, duration:2, ease: 'power2.out', onComplete: ()=>{ isAnimating = false; if(typeof onDone === 'function') onDone(); }});
+          gsap.to(container, {scrollLeft: left, duration:0.8, ease: 'power2.out', onComplete: ()=>{ isAnimating = false; if(typeof onDone === 'function') onDone(); }});
           return;
         }catch(err){ isAnimating = false; /* fallthrough to native */ }
       }
       try{
-        container.scrollTo({left, behavior: smooth ? 'smooth' : 'auto'});
+        container.scrollTo({left, behavior: smooth && !prefersReduced ? 'smooth' : 'auto'});
       }catch(e){ container.scrollLeft = left; }
       if(typeof onDone === 'function'){
         // best-effort callback after native smooth; duration approximated
-        setTimeout(onDone, smooth ? 560 : 0);
+        setTimeout(onDone, smooth ? 400 : 0);
       }
     }
 
-    function show(i){
+    function show(i, fromButton = false){
       const prev = idx;
       idx = i;
-      // normalize idx bounds (we allow idx to step to LAST_INDEX+1 as sentinel)
       // animate visual swap: outgoing -> incoming
       try{
-        if(typeof gsap !== 'undefined'){
+        if(typeof gsap !== 'undefined' && !prefersReduced){
           const outCard = cards[prev];
-          const inCard = cards[idx === LAST_INDEX+1 ? LAST_INDEX+1 : idx];
+          const inCard = cards[idx === LAST_INDEX+1 ? LAST_INDEX+1 : (idx === -1 ? 0 : idx)];
           // gentle scale down outgoing and dim
           if(outCard) gsap.killTweensOf(outCard);
           if(inCard) gsap.killTweensOf(inCard);
-          if(outCard) gsap.to(outCard, {scale:0.98, opacity:0.92, boxShadow:'0 10px 30px rgba(2,6,23,0.32)', duration:2, ease:'power2.out'});
-          if(inCard) gsap.fromTo(inCard, {scale:0.98, opacity:0.92}, {scale:1.02, opacity:1, boxShadow:'0 28px 68px rgba(2,6,23,0.55)', duration:2, ease:'power2.out'});
+          if(outCard) gsap.to(outCard, {scale:0.98, opacity:0.92, boxShadow:'0 10px 30px rgba(2,6,23,0.32)', duration:0.8, ease:'power2.out'});
+          if(inCard) gsap.fromTo(inCard, {scale:0.98, opacity:0.92}, {scale:1.02, opacity:1, boxShadow:'0 28px 68px rgba(2,6,23,0.55)', duration:0.8, ease:'power2.out'});
         } else {
           // fallback: toggle helper classes
           const prevCard = cards[prev];
@@ -240,28 +242,56 @@ document.addEventListener('DOMContentLoaded', ()=>{
         }
       }catch(err){ /* swallow animation errors */ }
 
-      // scroll to target
+      // scroll to target with infinite loop handling
       if(idx === LAST_INDEX + 1){
-        // scroll to appended clone, then jump to real first WITHOUT animation
+        // going forward past last: scroll to appended clone, then jump to real first
         scrollToIndex(idx, true, ()=>{
           idx = FIRST_INDEX;
+          scrollToIndex(idx, false);
+        });
+      } else if(idx === 0){
+        // going backward past first: scroll to prepended clone, then jump to real last
+        scrollToIndex(0, true, ()=>{
+          idx = LAST_INDEX;
           scrollToIndex(idx, false);
         });
       } else {
         scrollToIndex(idx, true);
       }
+      
+      // restart autoplay after manual navigation
+      if(fromButton && !prefersReduced){
+        stop();
+        setTimeout(()=>{ if(!timer) start(); }, 2000);
+      }
     }
 
-    function next(){ show(idx + 1); }
-    function start(){ if(timer) return; timer = setInterval(next, DURATION); }
+    function next(fromButton = false){ show(idx + 1, fromButton); }
+    function prev(fromButton = false){ 
+      if(idx === FIRST_INDEX){
+        show(0, fromButton); // go to prepended clone
+      } else {
+        show(idx - 1, fromButton); 
+      }
+    }
+    
+    function start(){ 
+      if(timer || prefersReduced) return; 
+      timer = setInterval(()=>next(false), DURATION); 
+    }
     function stop(){ if(timer){ clearInterval(timer); timer = null; } }
 
-    container.addEventListener('mouseenter', stop);
-    container.addEventListener('mouseleave', ()=>{ if(!timer) start(); });
-    container.addEventListener('focusin', stop);
-    container.addEventListener('focusout', ()=>{ if(!timer) start(); });
+    // Button click handlers
+    btnPrev.addEventListener('click', ()=>{ prev(true); });
+    btnNext.addEventListener('click', ()=>{ next(true); });
 
-    // handle manual scroll: if user scrolls to sentinel clones, fix by jumping to equivalent real card
+    // Pause autoplay on hover/focus
+    container.addEventListener('mouseenter', stop);
+    container.addEventListener('mouseleave', ()=>{ if(!timer && !prefersReduced) start(); });
+    container.addEventListener('focusin', stop);
+    container.addEventListener('focusout', ()=>{ if(!timer && !prefersReduced) start(); });
+
+    // Handle manual scroll: if user scrolls to sentinel clones, fix by jumping to equivalent real card
     let scrollDeb = null;
     container.addEventListener('scroll', ()=>{
       // pause autoplay during manual scroll
@@ -282,15 +312,25 @@ document.addEventListener('DOMContentLoaded', ()=>{
         else if(nearest === cards.length-1){ idx = FIRST_INDEX; scrollToIndex(idx, false); }
         else { idx = nearest; }
         // resume autoplay shortly
-        setTimeout(()=>{ if(!timer) start(); }, 900);
+        if(!prefersReduced){
+          setTimeout(()=>{ if(!timer) start(); }, 900);
+        }
       }, 150);
     }, {passive:true});
 
-    document.addEventListener('visibilitychange', ()=>{ if(document.hidden) stop(); else if(!timer) start(); });
+    document.addEventListener('visibilitychange', ()=>{ if(document.hidden) stop(); else if(!timer && !prefersReduced) start(); });
+
+    // Keyboard navigation on arrow buttons
+    btnPrev.addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); prev(true); }
+    });
+    btnNext.addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); next(true); }
+    });
 
     // initialize at real first without animation
     scrollToIndex(FIRST_INDEX, false);
-    start();
+    if(!prefersReduced) start();
   })();
 
   
